@@ -5,6 +5,7 @@ const ExpressError = require("../utils/ExpressError");
 const Campground = require("../models/campground");
 const Review = require("../models/review");
 const { campgroundSchema } = require("../schemas");
+const { isLoggedIn } = require("../middleware");
 
 const validateCampground = (req, res, next) => {
   console.log(req.body);
@@ -27,12 +28,13 @@ router.get(
   })
 );
 //:id 가 먼저 올 경우 new 에 :id 가 들어가버린다.
-router.get("/new", async (req, res) => {
+router.get("/new", isLoggedIn, async (req, res) => {
   res.render("campgrounds/new");
 });
 
 router.post(
   "/",
+  isLoggedIn,
   validateCampground,
   catchAsync(async (req, res, next) => {
     // if (!req.body.campground)
@@ -62,6 +64,7 @@ router.get(
 
 router.get(
   "/:id/edit",
+  isLoggedIn,
   catchAsync(async (req, res) => {
     const campground = await Campground.findById(req.params.id);
     if (!campground) {
@@ -74,6 +77,7 @@ router.get(
 //update
 router.put(
   "/:id",
+  isLoggedIn,
   validateCampground,
   catchAsync(async (req, res) => {
     const { id } = req.params;
@@ -87,6 +91,7 @@ router.put(
 
 router.delete(
   "/:id",
+  isLoggedIn,
   catchAsync(async (req, res) => {
     const { id } = req.params;
     await Campground.findByIdAndDelete(id);
