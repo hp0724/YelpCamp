@@ -37,15 +37,16 @@ router.post(
   passport.authenticate("local", {
     failureFlash: true,
     failureRedirect: "/login",
+    keepSessionInfo: true,
   }),
   (req, res) => {
-    req.flash("success", "welcome back");
+    req.flash("success", "Welcome back!");
     const redirectUrl = req.session.returnTo || "/campgrounds";
-    delete req.session.returnTo;
+
+    delete req.session.returnTo; // 사용한 후, 세션에서 해당 값을 삭제
     res.redirect(redirectUrl);
   }
 );
-
 router.get("/logout", (req, res) => {
   req.logout(() => {
     req.flash("success", "Goodbye!");
