@@ -3,7 +3,13 @@
   <h1 class="text-center">New Campground</h1>
   <!-- 가운데 정렬 -->
   <div class="col-6 offset-3">
-    <form action="/campgrounds" method="POST" class="validated-form" novalidate>
+    <form
+      action="/campgrounds"
+      method="POST"
+      novalidate
+      class="validated-form"
+      enctype="multipart/form-data"
+    >
       <div class="mb-3">
         <label class="form-label" for="title">Title</label>
         <input
@@ -26,7 +32,8 @@
         />
         <div class="valid-feedback">좋아요!</div>
       </div>
-      <div class="mb-3">
+
+      <!-- <div class="mb-3">
         <label class="form-label" for="image">Image Url</label>
         <input
           class="form-control"
@@ -36,7 +43,7 @@
           required
         />
         <div class="valid-feedback">좋아요!</div>
-      </div>
+      </div> -->
       <div class="mb-3">
         <label class="form-label" for="price">Campground Price</label>
 
@@ -67,6 +74,17 @@
         ></textarea>
       </div>
       <div class="valid-feedback">좋아요!</div>
+
+      <div class="mb-3 custom-file">
+        <label for="image" class="form-label">Image</label>
+        <input
+          class="form-control custom-file-label"
+          type="file"
+          id="image"
+          name="image"
+          multiple
+        />
+      </div>
 
       <div class="mb-3">
         <button class="btn btn-success">Add Campground</button>
