@@ -1,34 +1,65 @@
 <% layout('layouts/boilerplate') %>
 
-<h1>Register</h1>
-<form action="/register" method="POST" class="validated-form" novalidate>
-  <div class="mb-3">
-    <label class="form-label" for="username">Username</label>
-    <input
-      class="form-control"
-      type="text"
-      id="username"
-      name="username"
-      required
-    />
-    <div class="valid-feedback">좋아요!</div>
-  </div>
-  <div class="mb-3">
-    <label class="form-label" for="email">Email</label>
-    <input class="form-control" type="email" id="email" name="email" required />
-    <div class="valid-feedback">좋아요!</div>
-  </div>
+<div
+  class="container d-flex justify-content-center align-items-center vh-95 mb-3"
+>
+  <div class="row w-100">
+    <div class="col-md-6 offset-md-3 col-lg-4 offset-lg-4">
+      <div class="card shadow">
+        <img
+          src="https://images.unsplash.com/photo-1496545672447-f699b503d270?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTh8fCVFQyVCQSVBMCVFRCU5NSU5MXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=600&q=60"
+          alt=""
+          class="card-img-top"
+        />
+        <div class="card-body">
+          <h5 class="card-title">Register</h5>
+          <form
+            action="/register"
+            method="POST"
+            class="validated-form"
+            novalidate
+          >
+            <div class="mb-3">
+              <label class="form-label" for="username">Username</label>
+              <input
+                class="form-control"
+                type="text"
+                id="username"
+                name="username"
+                required
+                autofocus
+              />
+              <div class="valid-feedback">좋아요!</div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="email">Email</label>
+              <input
+                class="form-control"
+                type="email"
+                id="email"
+                name="email"
+                required
+              />
+              <div class="valid-feedback">좋아요!</div>
+            </div>
 
-  <div class="mb-3">
-    <label class="form-label" for="password">Password</label>
-    <input
-      class="form-control"
-      type="password"
-      id="password"
-      name="password"
-      required
-    />
-    <div class="valid-feedback">좋아요!</div>
+            <div class="mb-3">
+              <label class="form-label" for="password">Password</label>
+              <input
+                class="form-control"
+                type="password"
+                id="password"
+                name="password"
+                required
+              />
+              <div class="valid-feedback">좋아요!</div>
+            </div>
+            <button class="btn btn-success" style="width: 100%">
+              Register
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
-  <button class="btn btn-success">Register</button>
-</form>
+</div>
