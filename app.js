@@ -13,6 +13,7 @@ const methodOverride = require("method-override");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user");
+const helmet = require("helmet");
 
 const userRoutes = require("./routes/users");
 const campgroundRoutes = require("./routes/campgrounds.js");
@@ -25,6 +26,7 @@ mongoose.connect("mongodb://localhost:27017/yelp-camp", {
 
 const campground = require("./models/campground");
 const { title } = require("process");
+const ExpressMongoSanitize = require("express-mongo-sanitize");
 
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
@@ -41,20 +43,74 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
+app.use(ExpressMongoSanitize({ replaceWith: "_" }));
 
 const sessionConfig = {
+  name: "session",
   secret: "thisshouldbebettersecret!",
   resave: false,
   saveUninitialized: true,
   //오늘 날짜에 일주일 플러스
   cookie: {
+    //http로만 접근 가능 js 불가능
     httpOnly: true,
+    // secure:true,
     expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
     maxAge: 1000 * 60 * 60 * 24 * 7,
   },
 };
 app.use(session(sessionConfig));
 app.use(flash());
+app.use(helmet());
+
+const scriptSrcUrls = [
+  "https://stackpath.bootstrapcdn.com/",
+  "https://api.tiles.mapbox.com/",
+  "https://api.mapbox.com/",
+  "https://kit.fontawesome.com/",
+  "https://cdnjs.cloudflare.com/",
+  "https://cdn.jsdelivr.net",
+];
+
+const styleSrcUrls = [
+  "https://stackpath.bootstrapcdn.com/",
+  "https://api.tiles.mapbox.com/",
+  "https://api.mapbox.com/",
+  "https://kit-free.fontawesome.com/",
+  "https://cdnjs.cloudflare.com/",
+  "https://use.fontawesome.come/",
+  "https://cdn.jsdelivr.net/",
+];
+const connectSrcUrls = [
+  "https://api.mapbox.com/",
+  "https://a.tiles.mapbox.com/",
+  "https://b.tiles.mapbox.com/",
+  "https://events.mapbox.com/",
+];
+
+const fontSrcUrls = [];
+
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: [],
+      connectSrc: ["'self'", ...connectSrcUrls],
+      scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
+      styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
+      workerSrc: ["'self'", "blob:"],
+      objectSrc: [],
+      imgSrc: [
+        "'self'",
+        "blob:",
+        "data:",
+        "https: data:",
+        "https://res.cludinary.com/dvyvphh3u/",
+        "https://images.unsplash.com/",
+      ],
+      fontSrc: ["'self'", ...fontSrcUrls],
+    },
+  })
+);
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -64,6 +120,8 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 app.use((req, res, next) => {
+  console.log(req.query);
+
   res.locals.currentUser = req.user;
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
