@@ -14,12 +14,16 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user");
 const helmet = require("helmet");
+const MongoDBStore = require("connect-mongo");
 
 const userRoutes = require("./routes/users");
 const campgroundRoutes = require("./routes/campgrounds.js");
 const reviewRoutes = require("./routes/reviews.js");
+// const dbUrl = process.env.DB_URL;
 
-mongoose.connect("mongodb://localhost:27017/yelp-camp", {
+const dbUrl = "mongodb://localhost:27017/yelp-camp";
+
+mongoose.connect(dbUrl, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -49,7 +53,10 @@ const sessionConfig = {
   name: "session",
   secret: "thisshouldbebettersecret!",
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false,
+  store: MongoDBStore.create({
+    mongoUrl: dbUrl,
+  }),
   //오늘 날짜에 일주일 플러스
   cookie: {
     //http로만 접근 가능 js 불가능
