@@ -19,9 +19,9 @@ const MongoDBStore = require("connect-mongo");
 const userRoutes = require("./routes/users");
 const campgroundRoutes = require("./routes/campgrounds.js");
 const reviewRoutes = require("./routes/reviews.js");
-// const dbUrl = process.env.DB_URL;
+const dbUrl = process.env.DB_URL;
 
-const dbUrl = "mongodb://localhost:27017/yelp-camp";
+// const dbUrl = "mongodb://localhost:27017/yelp-camp";
 
 mongoose.connect(dbUrl, {
   useNewUrlParser: true,
@@ -163,6 +163,6 @@ app.use((err, req, res, next) => {
   res.status(statusCode).render("error", { err });
 });
 
-app.listen(3000, () => {
-  console.log("serving on port 3000");
+app.listen(8080, "0.0.0.0", () => {
+  console.log("serving on port 8080");
 });

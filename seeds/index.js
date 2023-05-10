@@ -20,7 +20,7 @@ const sample = (array) => array[Math.floor(Math.random() * array.length)];
 const seedDB = async () => {
   //초기화 뒤에 캠핑장 이름을 얻는다
   await Campground.deleteMany({});
-  for (let i = 0; i < 200; i++) {
+  for (let i = 0; i < 100; i++) {
     const random1000 = Math.floor(Math.random() * 1000);
     const price = Math.floor(Math.random() * 50) + 10;
     const camp = new Campground({
